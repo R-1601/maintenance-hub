@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Wind, ClipboardCheck, AlertTriangle, Store, TrendingUp, Calendar, Download, Trophy, ThumbsDown, MapPin, Info } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  CartesianGrid, Cell,
+  CartesianGrid, Cell, LineChart, Line,
 } from "recharts";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { StatCard } from "@/shared/components/StatCard";
@@ -204,20 +204,32 @@ export default function ChecklistDashboard() {
           })()}
         </div>
 
-        {/* Checklists por Mês */}
+        {/* Evolução de Inconformidades por Mês */}
         <div className="rounded-xl border bg-card p-4">
-          <h3 className="text-sm font-semibold mb-4">Checklists por Mês</h3>
-          <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={mediaPorMes} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+          <h3 className="text-sm font-semibold mb-1">Evolução de Inconformidades por Mês</h3>
+          <p className="text-xs text-muted-foreground mb-4">Tendência — queda indica melhora nas lojas</p>
+          <ResponsiveContainer width="100%" height={240}>
+            <LineChart
+              data={[...(resumoMensal ?? [])].reverse()}
+              margin={{ top: 5, right: 16, left: -10, bottom: 0 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis dataKey="mes" tick={{ fontSize: 11 }} />
               <YAxis tick={{ fontSize: 11 }} />
               <Tooltip
-                formatter={(v: number) => [v, "Checklists"]}
+                formatter={(v: number) => [v, "Inconformidades"]}
                 contentStyle={{ fontSize: 12, borderRadius: 8 }}
               />
-              <Bar dataKey="count" name="Checklists" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-            </BarChart>
+              <Line
+                type="monotone"
+                dataKey="inc"
+                name="Inconformidades"
+                stroke="#ef4444"
+                strokeWidth={2.5}
+                dot={{ r: 4, fill: "#ef4444", stroke: "hsl(var(--background))", strokeWidth: 2 }}
+                activeDot={{ r: 6 }}
+              />
+            </LineChart>
           </ResponsiveContainer>
         </div>
       </div>
