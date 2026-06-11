@@ -167,71 +167,33 @@ export default function ChecklistDashboard() {
         />
       </div>
 
-      {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
-        {/* Ranking de Lojas — melhores e piores */}
-        <div className="rounded-xl border bg-card p-4">
-          <h3 className="text-sm font-semibold mb-4">Ranking de Lojas</h3>
-          {(() => {
-            const sorted = [...(lojasRank ?? [])].sort((a, b) => b.media - a.media);
-            const top5 = sorted.slice(0, 5);
-            const bottom5 = [...sorted].reverse().slice(0, 5).reverse();
-            const rankData = [
-              ...top5.map((l) => ({ nome: l.nome, nota: l.media, tipo: "top" as const })),
-              ...bottom5
-                .filter((l) => !top5.find((t) => t.lid === l.lid))
-                .map((l) => ({ nome: l.nome, nota: l.media, tipo: "bottom" as const })),
-            ];
-            return (
-              <ResponsiveContainer width="100%" height={260}>
-                <BarChart data={rankData} layout="vertical" margin={{ top: 0, right: 40, left: 60, bottom: 0 }}>
-                  <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 11 }} />
-                  <YAxis type="category" dataKey="nome" tick={{ fontSize: 11 }} width={58} />
-                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                  <Tooltip formatter={(v: number) => v.toFixed(2)} />
-                  <Bar dataKey="nota" name="Nota" radius={[0, 4, 4, 0]}>
-                    {rankData.map((entry, i) => (
-                      <Cell
-                        key={i}
-                        fill={entry.nota >= 95 ? "#10b981" : entry.nota >= 80 ? "#f59e0b" : "#ef4444"}
-                      />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            );
-          })()}
-        </div>
-
-        {/* Evolução de Inconformidades por Mês */}
-        <div className="rounded-xl border bg-card p-4">
-          <h3 className="text-sm font-semibold mb-1">Evolução de Inconformidades por Mês</h3>
-          <p className="text-xs text-muted-foreground mb-4">Tendência — queda indica melhora nas lojas</p>
-          <ResponsiveContainer width="100%" height={240}>
-            <LineChart
-              data={[...(resumoMensal ?? [])].reverse()}
-              margin={{ top: 5, right: 16, left: -10, bottom: 0 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis dataKey="mes" tick={{ fontSize: 11 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip
-                formatter={(v: number) => [v, "Inconformidades"]}
-                contentStyle={{ fontSize: 12, borderRadius: 8 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="inc"
-                name="Inconformidades"
-                stroke="#ef4444"
-                strokeWidth={2.5}
-                dot={{ r: 4, fill: "#ef4444", stroke: "hsl(var(--background))", strokeWidth: 2 }}
-                activeDot={{ r: 6 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+      {/* Evolução de Inconformidades por Mês */}
+      <div className="rounded-xl border bg-card p-4">
+        <h3 className="text-sm font-semibold mb-1">Evolução de Inconformidades por Mês</h3>
+        <p className="text-xs text-muted-foreground mb-4">Tendência — queda indica melhora nas lojas</p>
+        <ResponsiveContainer width="100%" height={220}>
+          <LineChart
+            data={[...(resumoMensal ?? [])].reverse()}
+            margin={{ top: 5, right: 16, left: -10, bottom: 0 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+            <XAxis dataKey="mes" tick={{ fontSize: 11 }} />
+            <YAxis tick={{ fontSize: 11 }} />
+            <Tooltip
+              formatter={(v: number) => [v, "Inconformidades"]}
+              contentStyle={{ fontSize: 12, borderRadius: 8 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="inc"
+              name="Inconformidades"
+              stroke="#ef4444"
+              strokeWidth={2.5}
+              dot={{ r: 4, fill: "#ef4444", stroke: "hsl(var(--background))", strokeWidth: 2 }}
+              activeDot={{ r: 6 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
 
       <div className="rounded-xl border bg-card p-4">
@@ -250,9 +212,8 @@ export default function ChecklistDashboard() {
         )}
       </div>
 
-      {/* Lojas que precisam de atenção + Resumo mensal */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Lojas que precisam de atenção */}
+      {/* Lojas que precisam de atenção */}
+      <div>
         <div className="rounded-xl border bg-card flex flex-col">
           <div className="flex items-center justify-between px-5 py-4 border-b">
             <h3 className="text-sm font-semibold flex items-center gap-2">
@@ -306,53 +267,6 @@ export default function ChecklistDashboard() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Resumo mensal */}
-        <div className="rounded-xl border bg-card flex flex-col">
-          <div className="flex items-center justify-between px-5 py-4 border-b">
-            <h3 className="text-sm font-semibold">Resumo mensal</h3>
-            <button
-              onClick={() => exportToCsv("resumo-mensal", (resumoMensal ?? []).map((r) => ({
-                Mês: r.mes, Checklists: r.checklists, Lojas: r.lojas,
-                Média: fmtScore(r.media), Inconformidades: r.inc,
-              })))}
-              className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
-            >
-              <Download className="h-3.5 w-3.5" /> Exportar CSV
-            </button>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b bg-muted/40">
-                  {["Mês", "Checklists", "Lojas", "Média", "Inconf."].map((h) => (
-                    <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {(resumoMensal ?? []).map((r) => (
-                  <tr key={r.mes} className="border-b hover:bg-muted/20">
-                    <td className="px-4 py-2.5 font-medium capitalize">{r.mes}</td>
-                    <td className="px-4 py-2.5">{r.checklists}</td>
-                    <td className="px-4 py-2.5">{r.lojas}</td>
-                    <td className={cn("px-4 py-2.5 font-semibold",
-                      r.media >= 95 ? "text-emerald-600" : r.media >= 80 ? "text-amber-600" : "text-red-600"
-                    )}>
-                      {fmtScore(r.media)}
-                    </td>
-                    <td className={cn("px-4 py-2.5", r.inc > 0 ? "text-red-600 font-semibold" : "text-emerald-600")}>
-                      {r.inc}
-                    </td>
-                  </tr>
-                ))}
-                {(resumoMensal ?? []).length === 0 && (
-                  <tr><td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">Sem dados</td></tr>
-                )}
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
