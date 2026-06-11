@@ -271,6 +271,53 @@ export default function ChecklistDashboard() {
         </div>
       </div>
 
+      {/* Resumo Mensal */}
+      <div className="rounded-xl border bg-card flex flex-col">
+        <div className="flex items-center justify-between px-5 py-4 border-b">
+          <h3 className="text-sm font-semibold">Resumo Mensal</h3>
+          <button
+            onClick={() => exportToCsv("resumo-mensal", (resumoMensal ?? []).map((r) => ({
+              Mês: r.mes, Checklists: r.checklists, Lojas: r.lojas,
+              Média: fmtScore(r.media), Inconformidades: r.inc,
+            })))}
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+          >
+            <Download className="h-3.5 w-3.5" /> Exportar CSV
+          </button>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b bg-muted/40">
+                {["Mês", "Checklists", "Lojas", "Média", "Inconf."].map((h) => (
+                  <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {(resumoMensal ?? []).map((r) => (
+                <tr key={r.mes} className="border-b hover:bg-muted/20">
+                  <td className="px-4 py-2.5 font-medium capitalize">{r.mes}</td>
+                  <td className="px-4 py-2.5">{r.checklists}</td>
+                  <td className="px-4 py-2.5">{r.lojas}</td>
+                  <td className={cn("px-4 py-2.5 font-semibold",
+                    r.media >= 95 ? "text-emerald-600" : r.media >= 80 ? "text-amber-600" : "text-red-600"
+                  )}>
+                    {fmtScore(r.media)}
+                  </td>
+                  <td className={cn("px-4 py-2.5", r.inc > 0 ? "text-red-600 font-semibold" : "text-emerald-600")}>
+                    {r.inc}
+                  </td>
+                </tr>
+              ))}
+              {(resumoMensal ?? []).length === 0 && (
+                <tr><td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">Sem dados</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       {/* Lojas sem visita */}
       {(lojasSemVisita ?? []).length > 0 && (
         <div className="rounded-xl border bg-card">
