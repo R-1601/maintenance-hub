@@ -52,6 +52,17 @@ export default function ChecklistDashboard() {
   const melhorLoja = [...lojasComNotas].sort((a, b) => b.media - a.media)[0] ?? null;
   const piorLoja   = [...lojasComNotas].sort((a, b) => a.media - b.media)[0] ?? null;
 
+  // Comparativo mês a mês — apenas quando nenhum filtro de mês está ativo
+  const mesAtual   = resumoMensal?.[0] ?? null;
+  const mesAnterior = resumoMensal?.[1] ?? null;
+  const diffMedia = mesAtual && mesAnterior ? mesAtual.media - mesAnterior.media : null;
+  const diffInc   = mesAtual && mesAnterior ? mesAtual.inc - mesAnterior.inc : null;
+  const diffCL    = mesAtual && mesAnterior ? mesAtual.checklists - mesAnterior.checklists : null;
+  const diffLojas = mesAtual && mesAnterior ? mesAtual.lojas - mesAnterior.lojas : null;
+  const showTrend = selectedMonth === "all" && mesAtual && mesAnterior;
+  const fmtDiff = (v: number, unit = "") =>
+    `${v > 0 ? "+" : ""}${v.toFixed(unit === "pts" ? 2 : 0)}${unit ? " " + unit : ""} vs ${mesAnterior?.mes}`;
+
   return (
     <div className="space-y-6">
       <PageHeader title="Dashboard — Ar-Condicionado" subtitle="Análise de checklists de climatização" />
@@ -127,16 +138,39 @@ export default function ChecklistDashboard() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <StatCard title="Checklists" value={fmtNumber(cards?.total ?? 0)} icon={ClipboardCheck} iconColor="bg-sky-100 text-sky-600" />
+        <StatCard
+          title="Checklists"
+          value={fmtNumber(cards?.total ?? 0)}
+          icon={ClipboardCheck}
+          iconColor="bg-sky-100 text-sky-600"
+          trend={showTrend && diffCL !== null ? fmtDiff(diffCL) : undefined}
+          trendUp={diffCL !== null && diffCL >= 0}
+        />
         <StatCard
           title="Média Geral"
           value={cards?.media != null ? fmtScore(cards.media) : "—"}
           subtitle={cards?.media != null ? scoreLabel(cards.media) : ""}
           icon={TrendingUp}
           iconColor="bg-emerald-100 text-emerald-600"
+          trend={showTrend && diffMedia !== null ? fmtDiff(diffMedia, "pts") : undefined}
+          trendUp={diffMedia !== null && diffMedia >= 0}
         />
-        <StatCard title="Inconformidades" value={fmtNumber(cards?.totalInc ?? 0)} icon={AlertTriangle} iconColor="bg-red-100 text-red-600" />
-        <StatCard title="Lojas Avaliadas" value={fmtNumber(cards?.lojasAvaliadas ?? 0)} icon={Store} iconColor="bg-blue-100 text-blue-600" />
+        <StatCard
+          title="Inconformidades"
+          value={fmtNumber(cards?.totalInc ?? 0)}
+          icon={AlertTriangle}
+          iconColor="bg-red-100 text-red-600"
+          trend={showTrend && diffInc !== null ? fmtDiff(diffInc) : undefined}
+          trendUp={diffInc !== null && diffInc <= 0}
+        />
+        <StatCard
+          title="Lojas Avaliadas"
+          value={fmtNumber(cards?.lojasAvaliadas ?? 0)}
+          icon={Store}
+          iconColor="bg-blue-100 text-blue-600"
+          trend={showTrend && diffLojas !== null ? fmtDiff(diffLojas) : undefined}
+          trendUp={diffLojas !== null && diffLojas >= 0}
+        />
         <StatCard
           title="Última Visita"
           value={fmtDateBR(cards?.ultimaData)}
