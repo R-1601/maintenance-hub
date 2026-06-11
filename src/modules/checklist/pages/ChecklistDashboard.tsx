@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Wind, ClipboardCheck, AlertTriangle, Store, TrendingUp, Calendar, Download, Trophy, ThumbsDown, MapPin, Info } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  LineChart, Line, CartesianGrid, PieChart, Pie, Cell,
+  CartesianGrid, Cell,
 } from "recharts";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { StatCard } from "@/shared/components/StatCard";
@@ -168,56 +168,57 @@ export default function ChecklistDashboard() {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2 rounded-xl border bg-card p-4">
-          <h3 className="text-sm font-semibold mb-4">Média das Notas por Mês</h3>
-          <ResponsiveContainer width="100%" height={220}>
-            <LineChart data={mediaPorMes} margin={{ top: 5, right: 5, left: -15, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="mes" tick={{ fontSize: 11 }} />
-              <YAxis domain={[60, 100]} tick={{ fontSize: 11 }} />
-              <Tooltip formatter={(v: number) => v.toFixed(2)} />
-              <Line type="monotone" dataKey="media" name="Média" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3 }} />
-            </LineChart>
-          </ResponsiveContainer>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+        {/* Ranking de Lojas — melhores e piores */}
+        <div className="rounded-xl border bg-card p-4">
+          <h3 className="text-sm font-semibold mb-4">Ranking de Lojas</h3>
+          {(() => {
+            const sorted = [...(lojasRank ?? [])].sort((a, b) => b.media - a.media);
+            const top5 = sorted.slice(0, 5);
+            const bottom5 = [...sorted].reverse().slice(0, 5).reverse();
+            const rankData = [
+              ...top5.map((l) => ({ nome: l.nome, nota: l.media, tipo: "top" as const })),
+              ...bottom5
+                .filter((l) => !top5.find((t) => t.lid === l.lid))
+                .map((l) => ({ nome: l.nome, nota: l.media, tipo: "bottom" as const })),
+            ];
+            return (
+              <ResponsiveContainer width="100%" height={260}>
+                <BarChart data={rankData} layout="vertical" margin={{ top: 0, right: 40, left: 60, bottom: 0 }}>
+                  <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 11 }} />
+                  <YAxis type="category" dataKey="nome" tick={{ fontSize: 11 }} width={58} />
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                  <Tooltip formatter={(v: number) => v.toFixed(2)} />
+                  <Bar dataKey="nota" name="Nota" radius={[0, 4, 4, 0]}>
+                    {rankData.map((entry, i) => (
+                      <Cell
+                        key={i}
+                        fill={entry.nota >= 95 ? "#10b981" : entry.nota >= 80 ? "#f59e0b" : "#ef4444"}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            );
+          })()}
         </div>
 
+        {/* Checklists por Mês */}
         <div className="rounded-xl border bg-card p-4">
-          <h3 className="text-sm font-semibold mb-4">Distribuição por Faixa</h3>
-          <ResponsiveContainer width="100%" height={200}>
-            <PieChart>
-              <Pie
-                data={faixas}
-                cx="50%"
-                cy="50%"
-                innerRadius={45}
-                outerRadius={80}
-                dataKey="value"
-                paddingAngle={2}
-              >
-                {faixas?.map((f, i) => <Cell key={i} fill={f.color} />)}
-              </Pie>
+          <h3 className="text-sm font-semibold mb-4">Checklists por Mês</h3>
+          <ResponsiveContainer width="100%" height={260}>
+            <BarChart data={mediaPorMes} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="mes" tick={{ fontSize: 11 }} />
+              <YAxis tick={{ fontSize: 11 }} />
               <Tooltip
-                formatter={(value: number, name: string) => [value, name]}
+                formatter={(v: number) => [v, "Checklists"]}
                 contentStyle={{ fontSize: 12, borderRadius: 8 }}
               />
-            </PieChart>
+              <Bar dataKey="count" name="Checklists" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+            </BarChart>
           </ResponsiveContainer>
-          {/* Legenda com valores — sem sobreposição */}
-          <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5">
-            {faixas?.map((f) => {
-              const total = faixas.reduce((s, x) => s + x.value, 0);
-              const pct = total > 0 ? ((f.value / total) * 100).toFixed(1) : "0.0";
-              return (
-                <div key={f.name} className="flex items-center gap-2 text-xs">
-                  <div className="h-2.5 w-2.5 flex-shrink-0 rounded-sm" style={{ background: f.color }} />
-                  <span className="text-muted-foreground">{f.name}</span>
-                  <span className="ml-auto font-semibold tabular-nums">{f.value}</span>
-                  <span className="text-muted-foreground tabular-nums w-10 text-right">{pct}%</span>
-                </div>
-              );
-            })}
-          </div>
         </div>
       </div>
 
