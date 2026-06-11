@@ -167,62 +167,6 @@ export default function ChecklistDashboard() {
         />
       </div>
 
-      {/* Melhor e Pior Loja */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Melhor Loja */}
-        <div className="rounded-xl border bg-card p-5 flex items-start gap-4">
-          <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100">
-            <Trophy className="h-5 w-5 text-emerald-600" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Melhor Loja</p>
-            {melhorLoja ? (
-              <>
-                <p className="mt-0.5 text-base font-bold leading-tight truncate">{melhorLoja.fullNome}</p>
-                <div className="mt-2 flex flex-wrap items-center gap-3">
-                  <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-sm font-bold text-emerald-700">
-                    {fmtScore(melhorLoja.media)}
-                  </span>
-                  <span className="text-xs text-muted-foreground">{melhorLoja.count} checklist{melhorLoja.count !== 1 ? "s" : ""}</span>
-                  <span className="text-xs text-muted-foreground">{melhorLoja.inc} inconform.</span>
-                </div>
-                <p className="mt-1 text-xs text-muted-foreground">Última visita: {fmtDateBR(melhorLoja.ultimaVisita)}</p>
-              </>
-            ) : (
-              <p className="mt-1 text-sm text-muted-foreground">Sem dados</p>
-            )}
-          </div>
-        </div>
-
-        {/* Pior Loja */}
-        <div className="rounded-xl border bg-card p-5 flex items-start gap-4">
-          <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
-            <ThumbsDown className="h-5 w-5 text-red-600" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Pior Loja</p>
-            {piorLoja && piorLoja.lid !== melhorLoja?.lid ? (
-              <>
-                <p className="mt-0.5 text-base font-bold leading-tight truncate">{piorLoja.fullNome}</p>
-                <div className="mt-2 flex flex-wrap items-center gap-3">
-                  <span className={cn(
-                    "rounded-full px-2.5 py-0.5 text-sm font-bold",
-                    piorLoja.media >= 80 ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-700"
-                  )}>
-                    {fmtScore(piorLoja.media)}
-                  </span>
-                  <span className="text-xs text-muted-foreground">{piorLoja.count} checklist{piorLoja.count !== 1 ? "s" : ""}</span>
-                  <span className="text-xs text-red-600 font-medium">{piorLoja.inc} inconform.</span>
-                </div>
-                <p className="mt-1 text-xs text-muted-foreground">Última visita: {fmtDateBR(piorLoja.ultimaVisita)}</p>
-              </>
-            ) : (
-              <p className="mt-1 text-sm text-muted-foreground">Sem dados</p>
-            )}
-          </div>
-        </div>
-      </div>
-
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2 rounded-xl border bg-card p-4">
