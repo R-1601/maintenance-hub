@@ -68,6 +68,28 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+.dark {
+  --background: oklch(0.13 0.01 250);
+  --foreground: oklch(0.93 0 0);
+  --card: oklch(0.17 0.01 250);
+  --card-foreground: oklch(0.93 0 0);
+  --popover: oklch(0.17 0.01 250);
+  --popover-foreground: oklch(0.93 0 0);
+  --primary: oklch(0.6 0.18 250);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.22 0.01 250);
+  --secondary-foreground: oklch(0.93 0 0);
+  --muted: oklch(0.22 0.01 250);
+  --muted-foreground: oklch(0.62 0 0);
+  --accent: oklch(0.22 0.01 250);
+  --accent-foreground: oklch(0.93 0 0);
+  --destructive: oklch(0.55 0.22 27);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.28 0.01 250);
+  --input: oklch(0.28 0.01 250);
+  --ring: oklch(0.6 0.18 250);
+}
+
 body {
   @apply bg-background text-foreground;
   font-family: system-ui, -apple-system, sans-serif;

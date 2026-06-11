@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import { Menu, PanelLeftClose, PanelLeftOpen, LogOut, User } from "lucide-react";
+import { Menu, PanelLeftClose, PanelLeftOpen, LogOut, User, Sun, Moon } from "lucide-react";
 import { AppSidebar } from "./AppSidebar";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
 
 export function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, nome, signOut } = useAuth();
+  const { theme, toggle: toggleTheme } = useTheme();
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
@@ -58,6 +60,15 @@ export function AppLayout() {
           <div className="flex-1" />
 
           <span className="hidden sm:block text-xs text-muted-foreground">Maintenance Hub v1.0</span>
+
+          {/* Toggle dark/light */}
+          <button
+            onClick={toggleTheme}
+            title={theme === "dark" ? "Modo claro" : "Modo escuro"}
+            className="rounded-md p-1.5 text-muted-foreground hover:bg-muted transition-colors"
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
 
           {user && (
             <div className="flex items-center gap-2 ml-3 pl-3 border-l">
