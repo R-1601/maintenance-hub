@@ -34,8 +34,8 @@ const groups: NavGroup[] = [
     modulo: "checklist",
     items: [
       { title: "Dashboard", url: "/checklist", icon: Wind },
-      { title: "Checklists / Ar-Condicionado", url: "/checklist/checklists", icon: ClipboardList },
-      { title: "Lojas Avaliadas", url: "/checklist/lojas", icon: Store },
+      { title: "Visitas", url: "/checklist/checklists", icon: ClipboardList },
+      { title: "Ranking de Lojas", url: "/checklist/lojas", icon: Store },
       { title: "Técnicos", url: "/checklist/tecnicos", icon: HardHat },
       { title: "Importações", url: "/checklist/importacoes", icon: Upload },
       { title: "Conferência", url: "/checklist/conferencia", icon: ClipboardCheck },

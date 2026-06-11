@@ -175,7 +175,7 @@ export default function ChecklistList() {
         </div>
       )}
 
-      <PageHeader title="Checklists" subtitle="Listagem de todos os checklists processados">
+      <PageHeader title="Visitas" subtitle="Histórico detalhado de cada visita de manutenção de AC">
         <div className="flex items-center gap-2">
           {isAdmin && someSelected && (
             <button

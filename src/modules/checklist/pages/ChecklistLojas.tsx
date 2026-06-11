@@ -200,7 +200,7 @@ export default function ChecklistLojas() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Lojas Avaliadas" subtitle="Desempenho por loja nos checklists de AC — clique em uma loja para ver o histórico">
+      <PageHeader title="Ranking de Lojas" subtitle="Desempenho consolidado por loja — clique em uma loja para ver o histórico de evolução">
         <button onClick={handleExport} className="flex items-center gap-2 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90">
           <Download className="h-3.5 w-3.5" /> Exportar CSV
         </button>
