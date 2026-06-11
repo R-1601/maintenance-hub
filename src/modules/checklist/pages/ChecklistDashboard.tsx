@@ -126,7 +126,7 @@ export default function ChecklistDashboard() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         <StatCard title="Checklists" value={fmtNumber(cards?.total ?? 0)} icon={ClipboardCheck} iconColor="bg-sky-100 text-sky-600" />
         <StatCard
           title="Média Geral"
