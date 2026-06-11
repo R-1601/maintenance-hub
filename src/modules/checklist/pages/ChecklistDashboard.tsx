@@ -361,42 +361,6 @@ export default function ChecklistDashboard() {
         </div>
       )}
 
-      {/* Ranking por loja */}
-      <div className="rounded-xl border bg-card">
-        <div className="flex items-center justify-between px-5 py-4 border-b">
-          <h3 className="text-sm font-semibold">Ranking de Lojas</h3>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b bg-muted/40">
-                {["Loja", "Checklists", "Média", "Inconform.", "Última Visita"].map((h) => (
-                  <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {lojasRank?.sort((a, b) => b.media - a.media).map((l) => (
-                <tr key={l.lid} className="border-b hover:bg-muted/20">
-                  <td className="px-4 py-3 font-medium">{l.fullNome}</td>
-                  <td className="px-4 py-3 text-center">{l.count}</td>
-                  <td className={cn(
-                    "px-4 py-3 text-center font-semibold",
-                    l.media >= 95 ? "text-emerald-600" : l.media >= 80 ? "text-amber-600" : "text-red-600",
-                  )}>
-                    {fmtScore(l.media)}
-                  </td>
-                  <td className="px-4 py-3 text-center">{l.inc}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{fmtDateBR(l.ultimaVisita)}</td>
-                </tr>
-              ))}
-              {!lojasRank?.length && (
-                <tr><td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">Sem dados</td></tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
   );
 }
