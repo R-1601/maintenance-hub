@@ -120,7 +120,7 @@ export function AppSidebar({ collapsed }: { collapsed: boolean }) {
         collapsed ? "w-14" : "w-60",
       )}
     >
-      <div className="flex h-14 items-center gap-2 px-3 border-b border-sidebar-border shrink-0">
+      <Link to="/" className="flex h-14 items-center gap-2 px-3 border-b border-sidebar-border shrink-0 hover:bg-sidebar-accent/40 transition-colors">
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
           <Hammer className="h-4 w-4" />
         </div>
@@ -130,7 +130,7 @@ export function AppSidebar({ collapsed }: { collapsed: boolean }) {
             <div className="text-[10px] uppercase tracking-widest text-sidebar-foreground/50">Plataforma Integrada</div>
           </div>
         )}
-      </div>
+      </Link>
 
       <div className="flex-1 overflow-y-auto py-3 scrollbar-thin">
         {collapsed ? (
