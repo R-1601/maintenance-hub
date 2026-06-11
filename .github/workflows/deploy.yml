@@ -36,6 +36,11 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          VITE_CHECKLIST_SUPABASE_URL: ${{ secrets.VITE_CHECKLIST_SUPABASE_URL }}
+          VITE_CHECKLIST_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_CHECKLIST_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_PREDIAL_SUPABASE_URL: ${{ secrets.VITE_PREDIAL_SUPABASE_URL }}
+          VITE_PREDIAL_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_PREDIAL_SUPABASE_PUBLISHABLE_KEY }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
