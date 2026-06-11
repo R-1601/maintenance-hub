@@ -126,7 +126,7 @@ export default function ChecklistDashboard() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <StatCard title="Checklists" value={fmtNumber(cards?.total ?? 0)} icon={ClipboardCheck} iconColor="bg-sky-100 text-sky-600" />
         <StatCard
           title="Média Geral"
@@ -150,6 +150,20 @@ export default function ChecklistDashboard() {
           subtitle="Última visita"
           icon={Wind}
           iconColor="bg-indigo-100 text-indigo-600"
+        />
+        <StatCard
+          title="Melhor Nota"
+          value={melhorLoja ? fmtScore(melhorLoja.media) : "—"}
+          subtitle={melhorLoja?.nome ?? undefined}
+          icon={Trophy}
+          iconColor="bg-emerald-100 text-emerald-600"
+        />
+        <StatCard
+          title="Pior Nota"
+          value={piorLoja && piorLoja.lid !== melhorLoja?.lid ? fmtScore(piorLoja.media) : "—"}
+          subtitle={piorLoja && piorLoja.lid !== melhorLoja?.lid ? piorLoja.nome : undefined}
+          icon={ThumbsDown}
+          iconColor="bg-red-100 text-red-600"
         />
       </div>
 
