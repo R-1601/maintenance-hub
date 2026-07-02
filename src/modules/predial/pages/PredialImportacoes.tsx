@@ -141,7 +141,12 @@ export default function PredialImportacoes() {
       const msg = isRLS
         ? "Sem permissão para salvar. Configure a política RLS no Supabase Predial para permitir inserções."
         : error.message;
-      update(idx, { status: "erro", msg, parsed });
+            if (isRLS) {
+        const pendentes = JSON.parse(localStorage.getItem("os_pendentes_backup") || "[]");
+        pendentes.push({ arquivo: it.file.name, dados: parsed, salvoEm: new Date().toISOString() });
+        localStorage.setItem("os_pendentes_backup", JSON.stringify(pendentes));
+      }
+update(idx, { status: "erro", msg, parsed });
       return;
     }
 
@@ -201,7 +206,22 @@ export default function PredialImportacoes() {
 
         {items.length > 0 && (
           <div className="mt-4 flex justify-end gap-2">
-            <button onClick={() => setItems([])} className="rounded-md border px-3 py-1.5 text-sm hover:bg-muted transition-colors">
+            <button
+              onClick={() => {
+                const pendentes = localStorage.getItem("os_pendentes_backup") || "[]";
+                const blob = new Blob([pendentes], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "os_pendentes_backup.json";
+                a.click();
+              }}
+              className="rounded-md border border-amber-400 text-amber-700 px-3 py-1.5 text-sm hover:bg-amber-50 transition-colors"
+            >
+              Exportar pendentes
+            </button>
+            <button
+              onClick={() => setItems([])} className="rounded-md border px-3 py-1.5 text-sm hover:bg-muted transition-colors">
               Limpar lista
             </button>
             <button
