@@ -6,11 +6,11 @@ import { PageHeader } from "@/shared/components/PageHeader";
 import { fmtDateBR } from "@/shared/utils/format";
 import { cn } from "@/lib/utils";
 import {
-  ShieldCheck, User, Wind, Wrench, Info,
+  ShieldCheck, User, Wind, Info,
   CheckCircle2, Clock, XCircle, Loader2, RefreshCw,
 } from "lucide-react";
 
-type Modulo = "checklist" | "predial";
+type Modulo = "checklist";
 
 type SolicitacaoRow = {
   id: string;
@@ -27,8 +27,7 @@ type SolicitacaoRow = {
 };
 
 const MODULO_LABELS: Record<string, { label: string; icon: React.ElementType; color: string }> = {
-  checklist: { label: "Ar-Condicionado", icon: Wind,   color: "bg-sky-100 text-sky-700" },
-  predial:   { label: "Manutenção Predial", icon: Wrench, color: "bg-amber-100 text-amber-700" },
+  checklist: { label: "Ar-Condicionado", icon: Wind, color: "bg-sky-100 text-sky-700" },
 };
 
 export default function ChecklistUsuarios() {
@@ -171,7 +170,7 @@ export default function ChecklistUsuarios() {
 
             {pendentes.map((row) => {
               const ex = row.extracted_data ?? {};
-              const reqMods: Modulo[] = ex.requested_modulos ?? ["checklist", "predial"];
+              const reqMods: Modulo[] = ex.requested_modulos ?? ["checklist"];
               const isActing = actionId === row.id;
               return (
                 <div key={row.id} className="rounded-lg border bg-amber-50/50 border-amber-200 p-4 space-y-3">
@@ -207,26 +206,8 @@ export default function ChecklistUsuarios() {
                       className="flex items-center gap-1.5 rounded-md bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-700 disabled:opacity-50 transition-colors"
                     >
                       {isActing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle2 className="h-3.5 w-3.5" />}
-                      Aprovar todos os módulos
+                      Aprovar
                     </button>
-                    {reqMods.length > 1 && (
-                      <>
-                        <button
-                          onClick={() => handleAprovar(row, ["checklist"])}
-                          disabled={isActing}
-                          className="flex items-center gap-1.5 rounded-md bg-sky-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-sky-700 disabled:opacity-50 transition-colors"
-                        >
-                          <Wind className="h-3.5 w-3.5" /> Só AC
-                        </button>
-                        <button
-                          onClick={() => handleAprovar(row, ["predial"])}
-                          disabled={isActing}
-                          className="flex items-center gap-1.5 rounded-md bg-amber-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-amber-700 disabled:opacity-50 transition-colors"
-                        >
-                          <Wrench className="h-3.5 w-3.5" /> Só Predial
-                        </button>
-                      </>
-                    )}
                     <button
                       onClick={() => handleRejeitar(row)}
                       disabled={isActing}
@@ -299,7 +280,7 @@ export default function ChecklistUsuarios() {
                       <p className="text-xs text-muted-foreground">{ex.email ?? row.arquivo_nome}</p>
                     </div>
                     <button
-                      onClick={() => handleAprovar(row, ex.requested_modulos ?? ["checklist", "predial"])}
+                      onClick={() => handleAprovar(row, ex.requested_modulos ?? ["checklist"])}
                       disabled={isActing}
                       className="flex items-center gap-1.5 rounded-md bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-700 disabled:opacity-50 transition-colors whitespace-nowrap"
                     >

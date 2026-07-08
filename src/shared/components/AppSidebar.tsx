@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Wind, ClipboardList, Store, HardHat, Upload,
-  Wrench, DollarSign, Package, Briefcase, Users, Settings, Hammer,
+  Users, Settings, Hammer,
   ChevronDown, ChevronRight, Activity, Map, ClipboardCheck,
 } from "lucide-react";
 import { useState } from "react";
@@ -41,20 +41,6 @@ const groups: NavGroup[] = [
       { title: "Conferência", url: "/checklist/conferencia", icon: ClipboardCheck },
       { title: "Processamento", url: "/checklist/processamento", icon: Activity },
       { title: "Usuários", url: "/checklist/usuarios", icon: Users },
-    ],
-  },
-  {
-    label: "Manutenção Predial",
-    accentColor: "text-amber-400",
-    modulo: "predial",
-    items: [
-      { title: "Dashboard", url: "/predial", icon: Wrench },
-      { title: "Checklists / Predial", url: "/predial/ordens-servico", icon: ClipboardList },
-      { title: "Custos por Loja", url: "/predial/custos", icon: DollarSign },
-      { title: "Materiais", url: "/predial/materiais", icon: Package },
-      { title: "Prestadoras", url: "/predial/prestadoras", icon: Briefcase },
-      { title: "Técnicos", url: "/predial/tecnicos", icon: HardHat },
-      { title: "Importações", url: "/predial/importacoes", icon: Upload },
     ],
   },
   {

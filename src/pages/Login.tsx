@@ -3,8 +3,8 @@ import { Navigate } from "react-router-dom";
 import { Eye, EyeOff, Loader2, Hammer, Mail, CheckCircle2, User, Lock } from "lucide-react";
 import { checklistSupabase } from "@/integrations/checklist/client";
 import { useAuth } from "@/hooks/useAuth";
-import { cn } from "@/lib/utils";
 import type { Modulo } from "@/hooks/useAuth";
+import { cn } from "@/lib/utils";
 
 type Tab = "login" | "cadastro";
 
@@ -156,16 +156,10 @@ function CadastroForm({ onSuccess }: { onSuccess: () => void }) {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [showPw, setShowPw] = useState(false);
-  const [modulos, setModulos] = useState<Modulo[]>(["checklist", "predial"]);
+  const modulos: Modulo[] = ["checklist"];
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-
-  function toggleModulo(m: Modulo) {
-    setModulos((prev) =>
-      prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m]
-    );
-  }
 
   async function handleCadastro(e: React.FormEvent) {
     e.preventDefault();
@@ -173,7 +167,6 @@ function CadastroForm({ onSuccess }: { onSuccess: () => void }) {
 
     if (password.length < 6) { setError("A senha deve ter no mínimo 6 caracteres."); return; }
     if (password !== confirm) { setError("As senhas não coincidem."); return; }
-    if (modulos.length === 0) { setError("Selecione ao menos um módulo de acesso."); return; }
 
     setSubmitting(true);
     const { data: signUpData, error: err } = await checklistSupabase.auth.signUp({
@@ -254,30 +247,7 @@ function CadastroForm({ onSuccess }: { onSuccess: () => void }) {
       <PasswordField label="Senha" value={password} onChange={setPassword} show={showPw} onToggle={() => setShowPw((v) => !v)} autoComplete="new-password" />
       <PasswordField label="Confirmar senha" value={confirm} onChange={setConfirm} show={showPw} onToggle={() => setShowPw((v) => !v)} autoComplete="new-password" />
 
-      {/* Módulos de acesso */}
-      <div>
-        <p className="text-xs font-medium text-slate-400 mb-2">Módulos de acesso solicitados</p>
-        <div className="flex gap-2">
-          {(["checklist", "predial"] as Modulo[]).map((m) => (
-            <button
-              key={m}
-              type="button"
-              onClick={() => toggleModulo(m)}
-              className={cn(
-                "flex-1 rounded-lg border py-2 text-sm font-medium transition-all",
-                modulos.includes(m)
-                  ? "border-primary bg-primary/20 text-primary"
-                  : "border-slate-600 text-slate-400 hover:border-slate-500"
-              )}
-            >
-              {m === "checklist" ? "⚙ Ar-Condicionado" : "🔧 Predial"}
-            </button>
-          ))}
-        </div>
-        <p className="mt-1.5 text-[11px] text-slate-500">
-          O administrador pode ajustar os acessos após a aprovação da conta.
-        </p>
-      </div>
+
 
       {error && (
         <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">

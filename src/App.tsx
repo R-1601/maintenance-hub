@@ -16,14 +16,6 @@ import ChecklistConferencia from "./modules/checklist/pages/ChecklistConferencia
 import ChecklistUsuarios from "./modules/checklist/pages/ChecklistUsuarios";
 import ChecklistDetalhe from "./modules/checklist/pages/ChecklistDetalhe";
 import LojasMapa from "./pages/LojasMapa";
-import PredialDashboard from "./modules/predial/pages/PredialDashboard";
-import OrdensServico from "./modules/predial/pages/OrdensServico";
-import CustosLoja from "./modules/predial/pages/CustosLoja";
-import Materiais from "./modules/predial/pages/Materiais";
-import Prestadoras from "./modules/predial/pages/Prestadoras";
-import PredialTecnicos from "./modules/predial/pages/PredialTecnicos";
-import PredialImportacoes from "./modules/predial/pages/PredialImportacoes";
-import OrdemServicoDetalhe from "./modules/predial/pages/OrdemServicoDetalhe";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -58,16 +50,6 @@ export default function App() {
             <Route path="/checklist/processamento" element={<ChecklistProcessamento />} />
             <Route path="/checklist/conferencia" element={<ChecklistConferencia />} />
             <Route path="/checklist/usuarios" element={<ChecklistUsuarios />} />
-
-            {/* Manutenção Predial */}
-            <Route path="/predial" element={<PredialDashboard />} />
-            <Route path="/predial/ordens-servico" element={<OrdensServico />} />
-            <Route path="/predial/ordens-servico/:id" element={<OrdemServicoDetalhe />} />
-            <Route path="/predial/custos" element={<CustosLoja />} />
-            <Route path="/predial/materiais" element={<Materiais />} />
-            <Route path="/predial/prestadoras" element={<Prestadoras />} />
-            <Route path="/predial/tecnicos" element={<PredialTecnicos />} />
-            <Route path="/predial/importacoes" element={<PredialImportacoes />} />
 
             {/* Lojas */}
             <Route path="/lojas" element={<LojasMapa />} />

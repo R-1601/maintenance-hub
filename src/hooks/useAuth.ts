@@ -4,7 +4,7 @@ import { checklistSupabase } from "@/integrations/checklist/client";
 
 const ADMIN_EMAILS = ["robert-fc@outlook.com"];
 
-export type Modulo = "checklist" | "predial";
+export type Modulo = "checklist";
 
 type AccessRequest = {
   status: "aguardando_conferencia" | "aprovado" | "rejeitado" | null;
@@ -65,9 +65,9 @@ export function useAuth() {
   let isRejected = false;
 
   if (isAdmin) {
-    modulos = ["checklist", "predial"];
+    modulos = ["checklist"];
   } else if (accessRequest?.status === "aprovado") {
-    modulos = accessRequest.modulos.length > 0 ? accessRequest.modulos : ["checklist", "predial"];
+    modulos = accessRequest.modulos.length > 0 ? accessRequest.modulos : ["checklist"];
   } else if (accessRequest?.status === "aguardando_conferencia") {
     modulos = [];
     isPending = true;
@@ -76,7 +76,7 @@ export function useAuth() {
     isRejected = true;
   } else {
     // Usuário antigo sem solicitação → acesso completo (compatibilidade)
-    modulos = (user?.user_metadata?.modulos as Modulo[] | undefined) ?? ["checklist", "predial"];
+    modulos = (user?.user_metadata?.modulos as Modulo[] | undefined) ?? ["checklist"];
   }
 
   const nome: string = user?.user_metadata?.nome ?? email?.split("@")[0] ?? "Usuário";

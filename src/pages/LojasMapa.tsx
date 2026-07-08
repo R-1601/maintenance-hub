@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { LOJAS_MAPA } from "@/lib/lojasMapa";
 import { useChecklistData } from "@/modules/checklist/hooks/useChecklistData";
-import { usePredialData } from "@/modules/predial/hooks/usePredialData";
 import { fmtScore } from "@/shared/utils/format";
 import { cn } from "@/lib/utils";
 import { MapPin, TrendingUp, AlertTriangle, CheckCircle2 } from "lucide-react";
@@ -44,8 +43,6 @@ interface LojaInfo {
   lat: number | null;
   lng: number | null;
   mediaChecklist: number | null;
-  totalOS: number;
-  custoTotal: number;
 }
 
 export default function LojasMapa() {
@@ -55,28 +52,20 @@ export default function LojasMapa() {
   const [selected, setSelected] = useState<LojaInfo | null>(null);
 
   const checklistData = useChecklistData();
-  const predialData = usePredialData();
   const allChecklists = checklistData.allChecklists ?? [];
   const checkLojas = checklistData.lojas ?? [];
-  const allOS = predialData.allOS ?? [];
-  const predLojas = predialData.lojas ?? [];
 
-  // Build merged loja stats
-  const lojaStats = new Map<number, { mediaChecklist: number | null; totalOS: number; custoTotal: number }>();
+  // Build loja stats
+  const lojaStats = new Map<number, { mediaChecklist: number | null }>();
   LOJAS_MAPA.forEach((l) => {
     const checkLoja = checkLojas.find((c) => c.loja_numero === String(l.numero));
-    const predLoja = predLojas.find((p) => p.codigo_loja === String(l.numero));
 
     const notas = checkLoja
       ? allChecklists.filter((c) => c.loja_id === checkLoja.id && c.nota_final != null).map((c) => c.nota_final!)
       : [];
     const media = notas.length ? notas.reduce((a, b) => a + b, 0) / notas.length : null;
 
-    const osLoja = predLoja ? allOS.filter((o) => o.loja_id === predLoja.id) : [];
-    const totalOS = osLoja.length;
-    const custoTotal = osLoja.reduce((s, o) => s + (o.custo_total ?? 0), 0);
-
-    lojaStats.set(l.numero, { mediaChecklist: media, totalOS, custoTotal });
+    lojaStats.set(l.numero, { mediaChecklist: media });
   });
 
   useEffect(() => {
@@ -125,9 +114,8 @@ export default function LojasMapa() {
             Loja ${loja.numero} · ${loja.nome}
           </div>
           <div style="font-size:11px;color:#6b7280;margin-bottom:8px">${loja.endereco}</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px">
-            <div><div style="color:#6b7280;font-size:10px">Média AC</div>${mediaText}</div>
-            <div><div style="color:#6b7280;font-size:10px">OS Predial</div><span style="font-weight:600">${stats?.totalOS ?? 0}</span></div>
+          <div style="font-size:12px">
+            <div style="color:#6b7280;font-size:10px">Média AC</div>${mediaText}
           </div>
         </div>`;
 

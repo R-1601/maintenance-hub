@@ -1,6 +1,6 @@
-# Maintenance Hub — Plataforma Integrada de Manutenção
+# Maintenance Hub — Checklist Insights (Ar-Condicionado)
 
-Plataforma unificada que integra o **Checklist Insights (Ar-Condicionado)** e o **Order Insight (Manutenção Predial)** em um único painel moderno.
+Painel para gestão dos **Checklists de Ar-Condicionado** realizados nas lojas.
 
 ## Pré-requisitos
 
@@ -32,15 +32,12 @@ O output fica em `dist/`. O arquivo `netlify.toml` já está configurado para SP
 
 ## Variáveis de ambiente
 
-O arquivo `.env` já está preenchido com as chaves dos dois projetos.
+O arquivo `.env` já está preenchido com as chaves do projeto.
 Para Netlify, adicione as variáveis em **Site Settings → Environment Variables**:
 
 ```
 VITE_CHECKLIST_SUPABASE_URL=
 VITE_CHECKLIST_SUPABASE_PUBLISHABLE_KEY=
-
-VITE_PREDIAL_SUPABASE_URL=
-VITE_PREDIAL_SUPABASE_PUBLISHABLE_KEY=
 ```
 
 > ⚠️ Nunca use `service_role` keys no frontend.
@@ -55,12 +52,6 @@ VITE_PREDIAL_SUPABASE_PUBLISHABLE_KEY=
 | `/checklist/lojas` | Lojas avaliadas |
 | `/checklist/tecnicos` | Análise por técnico |
 | `/checklist/importacoes` | Log de importações |
-| `/predial` | Dashboard de Manutenção Predial |
-| `/predial/ordens-servico` | Listagem de OS |
-| `/predial/custos` | Custos por loja |
-| `/predial/materiais` | Materiais utilizados |
-| `/predial/prestadoras` | Prestadoras |
-| `/predial/tecnicos` | Técnicos |
 | `/lojas/:id` | Visão unificada por loja |
 | `/configuracoes` | Configurações |
 
@@ -73,20 +64,18 @@ VITE_PREDIAL_SUPABASE_PUBLISHABLE_KEY=
 - React Router v6
 - @tanstack/react-query
 - Recharts
-- Supabase JS (dois clients separados)
+- Supabase JS
 
 ## Estrutura
 
 ```
 src/
 ├── integrations/
-│   ├── checklist/client.ts     ← Supabase Checklist
-│   └── predial/client.ts       ← Supabase Predial
+│   └── checklist/client.ts     ← Supabase Checklist
 ├── shared/
 │   ├── components/             ← Layout, Sidebar, StatCard, UI
 │   └── utils/                  ← format, storeUtils, exportCsv
 ├── modules/
-│   ├── checklist/              ← Hooks + páginas do módulo AC
-│   └── predial/                ← Hooks + páginas do módulo Predial
-└── pages/                      ← Dashboard Geral, LojaDetalhe, Config
+│   └── checklist/              ← Hooks + páginas do módulo AC
+└── pages/                      ← Dashboard Geral, LojaDetalhe, Config, Mapa
 ```
